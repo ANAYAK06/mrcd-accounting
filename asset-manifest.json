@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/mrcd-accounting/static/css/main.e6c3f0eb.css",
+    "main.js": "/mrcd-accounting/static/js/main.26d03501.js",
+    "static/js/453.86b9f39f.chunk.js": "/mrcd-accounting/static/js/453.86b9f39f.chunk.js",
+    "index.html": "/mrcd-accounting/index.html",
+    "main.e6c3f0eb.css.map": "/mrcd-accounting/static/css/main.e6c3f0eb.css.map",
+    "main.26d03501.js.map": "/mrcd-accounting/static/js/main.26d03501.js.map",
+    "453.86b9f39f.chunk.js.map": "/mrcd-accounting/static/js/453.86b9f39f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c3f0eb.css",
+    "static/js/main.26d03501.js"
+  ]
+}
