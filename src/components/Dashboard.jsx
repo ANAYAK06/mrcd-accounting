@@ -50,7 +50,7 @@ function Dashboard() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-16 h-16 border-4 border-green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-600">Loading dashboard...</p>
         </div>
       </div>
@@ -60,21 +60,21 @@ function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 text-white shadow-lg">
+      <div className="bg-gradient-to-r from-green-600 via-emerald-600 to-teal-700 rounded-2xl p-8 text-white">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold mb-2">
               Welcome to MRCD Accounting
             </h1>
-            <p className="text-blue-100">
+            <p className="text-green-100">
               Malabar Rehabilitation Center for Differently Abled
             </p>
           </div>
           <div className="hidden md:block">
-            <Calendar className="w-16 h-16 opacity-50" />
+            <Calendar className="w-16 h-16 opacity-30" />
           </div>
         </div>
-        <div className="mt-4 flex items-center gap-2 text-sm text-blue-100">
+        <div className="mt-4 flex items-center gap-2 text-sm text-green-100">
           <Calendar className="w-4 h-4" />
           <span>{new Date().toLocaleDateString('en-IN', { 
             weekday: 'long', 
@@ -88,12 +88,12 @@ function Dashboard() {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Total Assets Card */}
-        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500 hover:shadow-xl transition-shadow">
+        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-blue-300 transition-colors">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-blue-100 rounded-lg">
+            <div className="p-3 bg-blue-50 rounded-xl">
               <DollarSign className="w-6 h-6 text-blue-600" />
             </div>
-            <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded">
+            <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
               Assets
             </span>
           </div>
@@ -106,12 +106,12 @@ function Dashboard() {
         </div>
 
         {/* Total Liabilities Card */}
-        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500 hover:shadow-xl transition-shadow">
+        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-purple-300 transition-colors">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-purple-100 rounded-lg">
+            <div className="p-3 bg-purple-50 rounded-xl">
               <FileText className="w-6 h-6 text-purple-600" />
             </div>
-            <span className="text-xs font-semibold text-purple-600 bg-purple-50 px-2 py-1 rounded">
+            <span className="text-xs font-semibold text-purple-600 bg-purple-50 px-3 py-1 rounded-full">
               Liabilities
             </span>
           </div>
@@ -124,12 +124,12 @@ function Dashboard() {
         </div>
 
         {/* Monthly Income Card */}
-        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500 hover:shadow-xl transition-shadow">
+        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-green-300 transition-colors">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-green-100 rounded-lg">
+            <div className="p-3 bg-green-50 rounded-xl">
               <TrendingUp className="w-6 h-6 text-green-600" />
             </div>
-            <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded">
+            <span className="text-xs font-semibold text-green-600 bg-green-50 px-3 py-1 rounded-full">
               This Month
             </span>
           </div>
@@ -142,12 +142,12 @@ function Dashboard() {
         </div>
 
         {/* Monthly Expenditure Card */}
-        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-500 hover:shadow-xl transition-shadow">
+        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-red-300 transition-colors">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-red-100 rounded-lg">
+            <div className="p-3 bg-red-50 rounded-xl">
               <TrendingDown className="w-6 h-6 text-red-600" />
             </div>
-            <span className="text-xs font-semibold text-red-600 bg-red-50 px-2 py-1 rounded">
+            <span className="text-xs font-semibold text-red-600 bg-red-50 px-3 py-1 rounded-full">
               This Month
             </span>
           </div>
@@ -161,7 +161,7 @@ function Dashboard() {
       </div>
 
       {/* Surplus/Deficit Card */}
-      <div className={`rounded-xl shadow-md p-6 ${
+      <div className={`rounded-2xl p-8 ${
         dashboardData.surplus >= 0 
           ? 'bg-gradient-to-r from-green-500 to-green-600' 
           : 'bg-gradient-to-r from-red-500 to-red-600'
@@ -178,22 +178,22 @@ function Dashboard() {
           </div>
           <div className="hidden md:block">
             {dashboardData.surplus >= 0 ? (
-              <TrendingUp className="w-20 h-20 opacity-30" />
+              <TrendingUp className="w-20 h-20 opacity-20" />
             ) : (
-              <TrendingDown className="w-20 h-20 opacity-30" />
+              <TrendingDown className="w-20 h-20 opacity-20" />
             )}
           </div>
         </div>
       </div>
 
       {/* Recent Vouchers */}
-      <div className="bg-white rounded-xl shadow-md p-6">
+      <div className="bg-white rounded-2xl border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-            <FileText className="w-6 h-6 text-blue-600" />
+            <FileText className="w-6 h-6 text-green-600" />
             Recent Vouchers
           </h2>
-          <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+          <button className="text-sm text-green-600 hover:text-green-700 font-medium">
             View All →
           </button>
         </div>
@@ -207,7 +207,7 @@ function Dashboard() {
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-gray-50 border-y border-gray-200">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     Voucher No
@@ -226,7 +226,7 @@ function Dashboard() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-100">
                 {dashboardData.recentVouchers.map((voucher, index) => {
                   const totalAmount = voucher.entries?.reduce((sum, entry) => 
                     sum + (entry.debit || entry.credit || 0), 0
@@ -240,12 +240,12 @@ function Dashboard() {
                       <td className="px-6 py-4">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                           voucher.voucherType === 'Receipt' 
-                            ? 'bg-green-100 text-green-800'
+                            ? 'bg-green-50 text-green-700'
                             : voucher.voucherType === 'Payment'
-                            ? 'bg-red-100 text-red-800'
+                            ? 'bg-red-50 text-red-700'
                             : voucher.voucherType === 'Journal'
-                            ? 'bg-blue-100 text-blue-800'
-                            : 'bg-gray-100 text-gray-800'
+                            ? 'bg-blue-50 text-blue-700'
+                            : 'bg-gray-50 text-gray-700'
                         }`}>
                           {voucher.voucherType}
                         </span>
@@ -270,9 +270,9 @@ function Dashboard() {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-xl shadow-md p-6">
+        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-blue-300 transition-colors">
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-blue-100 rounded-lg">
+            <div className="p-3 bg-blue-50 rounded-xl">
               <Users className="w-8 h-8 text-blue-600" />
             </div>
             <div>
@@ -282,9 +282,9 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-md p-6">
+        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-purple-300 transition-colors">
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-purple-100 rounded-lg">
+            <div className="p-3 bg-purple-50 rounded-xl">
               <Users className="w-8 h-8 text-purple-600" />
             </div>
             <div>
@@ -294,9 +294,9 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-md p-6">
+        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-green-300 transition-colors">
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-green-100 rounded-lg">
+            <div className="p-3 bg-green-50 rounded-xl">
               <FileText className="w-8 h-8 text-green-600" />
             </div>
             <div>

@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { login } from '../api/api';
-import { Eye, EyeOff, Lock, Mail, AlertCircle, Users, Award, TrendingUp } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, AlertCircle } from 'lucide-react';
+import appLogo from '../assets/logo.png';
+import mrcdLogo from '../assets/mrcd-logo.png';
+
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -108,9 +111,9 @@ function Login({ onLogin }) {
                   />
                   <span className="ml-2 text-gray-700">Remember me</span>
                 </label>
-                <p  className="text-green-600 hover:text-green-700 font-medium">
+                <button type="button" className="text-green-600 hover:text-green-700 font-medium">
                   Forgot password?
-                </p>
+                </button>
               </div>
 
               <button
@@ -131,67 +134,61 @@ function Login({ onLogin }) {
 
             <div className="mt-6 text-center text-sm text-gray-600">
               Having trouble? Contact{' '}
-              <p  className="text-green-600 hover:text-green-700 font-medium">
+              <button type="button" className="text-green-600 hover:text-green-700 font-medium">
                 IT Support
-              </p>
+              </button>
             </div>
 
           </div>
         </div>
 
-        {/* Right Side */}
-        <div className="hidden lg:flex bg-gradient-to-br from-green-600 via-emerald-600 to-teal-700 p-10 flex-col justify-center text-white relative overflow-hidden">
+        {/* Right Side - Professional Branding */}
+        <div className="hidden lg:flex bg-gradient-to-br from-green-600 via-emerald-600 to-teal-700 p-12 flex-col justify-center items-center text-white relative overflow-hidden">
 
-          <div className="absolute top-10 right-10 w-32 h-32 bg-white opacity-10 rounded-full"></div>
-          <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-white opacity-10 rounded-full"></div>
+          {/* Decorative Elements */}
+          <div className="absolute top-20 right-20 w-40 h-40 bg-white opacity-5 rounded-full"></div>
+          <div className="absolute -bottom-16 -left-16 w-56 h-56 bg-white opacity-5 rounded-full"></div>
+          <div className="absolute top-1/2 left-10 w-24 h-24 bg-white opacity-5 rounded-full"></div>
 
-          <div className="relative z-10">
+          <div className="relative z-10 text-center max-w-md">
 
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-white bg-opacity-20 backdrop-blur-sm rounded-full mb-6 border-4 border-white border-opacity-30 shadow-xl">
-              <span className="text-3xl font-bold">M</span>
+            {/* App Logo and Name */}
+            <div className="mb-8">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-white mb-6 shadow-2xl p-1 rounded-full">
+            <img src={appLogo} alt="NGO Accounts" className="w-full h-full object-contain rounded-full" />
+              </div>
+              <h2 className="text-4xl font-bold mb-2 tracking-tight">
+                NGO Accounts
+              </h2>
+              <p className="text-lg text-green-100 font-medium">
+                Professional Accounting System
+              </p>
             </div>
 
-            <h2 className="text-4xl font-bold mb-3">
-              MRCD
-            </h2>
-            <p className="text-lg mb-1 text-green-100">
-              Malabar Rehabilitation Center
-            </p>
-            <p className="text-base text-green-100 mb-8">
-              for Differently Abled
-            </p>
+            {/* Divider */}
+            <div className="w-24 h-1 bg-white bg-opacity-30 mx-auto my-8 rounded-full"></div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 mt-10">
-
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-white bg-opacity-20 rounded-lg mb-2 shadow-lg">
-                  <TrendingUp className="w-6 h-6" />
-                </div>
-                <div className="text-2xl font-bold">500+</div>
-                <div className="text-xs text-green-100">Beneficiaries</div>
+            {/* MRCD Branding */}
+            <div className="mb-8">
+              <p className="text-sm text-green-100 mb-4 font-medium uppercase tracking-wider">
+                Developed For
+              </p>
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-2xl mb-4 shadow-xl p-3">
+                <img src={mrcdLogo} alt="MRCD" className="w-full h-full object-contain" />
               </div>
-
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-white bg-opacity-20 rounded-lg mb-2 shadow-lg">
-                  <Users className="w-6 h-6" />
-                </div>
-                <div className="text-2xl font-bold">50+</div>
-                <div className="text-xs text-green-100">Staff Members</div>
-              </div>
-
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-white bg-opacity-20 rounded-lg mb-2 shadow-lg">
-                  <Award className="w-6 h-6" />
-                </div>
-                <div className="text-2xl font-bold">99%</div>
-                <div className="text-xs text-green-100">Success Rate</div>
-              </div>
+              <h3 className="text-2xl font-bold mb-2">
+                MRCD
+              </h3>
+              <p className="text-base text-green-100 leading-relaxed">
+                Malabar Rehabilitation Center<br />
+                for Differently Abled
+              </p>
             </div>
 
-            <div classname="mt-10 p-5 bg-white bg-opacity-10 backdrop-blur-sm rounded-xl border border-white border-opacity-20 shadow-lg">
-              <p className="text-sm text-green-50 italic leading-relaxed">
-                "Empowering lives, building futures. Join us in making a difference in the lives of differently-abled individuals."
+            {/* Professional Tagline */}
+            <div className="mt-12 p-6 bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl border border-white border-opacity-20 shadow-lg">
+              <p className="text-sm text-green-50 leading-relaxed">
+                Streamlined financial management and accounting solutions designed specifically for non-profit organizations.
               </p>
             </div>
 

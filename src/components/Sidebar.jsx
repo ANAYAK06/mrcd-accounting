@@ -14,6 +14,7 @@ import {
   FileSpreadsheet,
   DollarSign
 } from 'lucide-react';
+import mrcdLogo from '../assets/mrcd-logo.png';
 
 function Sidebar({ isOpen, onToggle, activeTab, onTabChange }) {
   const [isExpanded, setIsExpanded] = useState(true);
@@ -115,10 +116,10 @@ function Sidebar({ isOpen, onToggle, activeTab, onTabChange }) {
       >
         <div className="flex flex-col h-full">
           {/* Expand/Collapse Button - Desktop Only */}
-          <div className="hidden lg:flex items-center justify-end p-3 border-b border-gray-200">
+          <div className="hidden lg:flex items-center justify-end p-3 border-b border-gray-100">
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className="p-2 rounded-lg hover:bg-gray-50 transition-colors"
               title={isExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
             >
               {isExpanded ? (
@@ -152,14 +153,14 @@ function Sidebar({ isOpen, onToggle, activeTab, onTabChange }) {
                       w-full flex items-center gap-3 px-3 py-3 rounded-lg
                       transition-all duration-200
                       ${isActive 
-                        ? 'bg-blue-50 text-blue-600 shadow-sm' 
-                        : 'text-gray-700 hover:bg-gray-100'
+                        ? 'bg-green-50 text-green-700' 
+                        : 'text-gray-700 hover:bg-gray-50'
                       }
                       ${!isExpanded ? 'justify-center' : ''}
                     `}
                     title={!isExpanded ? item.label : ''}
                   >
-                    <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-blue-600' : 'text-gray-600'}`} />
+                    <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-green-600' : 'text-gray-500'}`} />
                     
                     {isExpanded && (
                       <>
@@ -183,7 +184,7 @@ function Sidebar({ isOpen, onToggle, activeTab, onTabChange }) {
 
                   {/* Submenu Items */}
                   {hasSubmenu && isExpanded && isSubmenuExpanded && (
-                    <div className="ml-4 mt-1 space-y-1 border-l-2 border-gray-200 pl-3">
+                    <div className="ml-4 mt-1 space-y-1 border-l-2 border-gray-100 pl-3">
                       {item.submenu.map((subItem) => {
                         const SubIcon = subItem.icon;
                         const isSubActive = activeTab === subItem.id;
@@ -196,7 +197,7 @@ function Sidebar({ isOpen, onToggle, activeTab, onTabChange }) {
                               w-full flex items-center gap-3 px-3 py-2 rounded-lg
                               text-sm transition-colors
                               ${isSubActive
-                                ? 'bg-blue-50 text-blue-600 font-medium'
+                                ? 'bg-green-50 text-green-700 font-medium'
                                 : 'text-gray-600 hover:bg-gray-50'
                               }
                             `}
@@ -215,10 +216,10 @@ function Sidebar({ isOpen, onToggle, activeTab, onTabChange }) {
 
           {/* Footer - Organization Info */}
           {isExpanded && (
-            <div className="p-4 border-t border-gray-200 bg-gray-50">
+            <div className="p-4 border-t border-gray-100 bg-gray-50">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">M</span>
+                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center p-2 border border-gray-200">
+                  <img src={mrcdLogo} alt="MRCD" className="w-full h-full object-contain" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-gray-900">MRCD</p>
@@ -226,7 +227,7 @@ function Sidebar({ isOpen, onToggle, activeTab, onTabChange }) {
                 </div>
               </div>
               <p className="text-xs text-gray-500 leading-relaxed">
-                Accounting System for Malabar Rehabilitation Center
+                NGO Accounting System
               </p>
             </div>
           )}
