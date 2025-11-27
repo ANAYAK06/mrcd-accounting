@@ -12,6 +12,7 @@ import LedgerReport from './components/reports/LedgerReport';
 import TrialBalance from './components/reports/TrialBalance';
 import IncomeExpenditure from './components/reports/IncomeExpenditure';
 import BalanceSheet from './components/reports/BalanceSheet';
+import AccountWiseMonthly from './components/reports/AccountWiseMonthly';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -90,6 +91,10 @@ function App() {
             )}
             {activeTab === 'balance-sheet' && (
               <BalanceSheet />
+            )}
+           
+            {activeTab === 'account-wise-monthly' && (
+              <AccountWiseMonthly />
             )}
             {activeTab === 'users' && (
               <div className="bg-white rounded-xl shadow-md p-8">

@@ -292,6 +292,34 @@ export const getTrialBalance = async (asOnDate) => {
 };
 
 // ============================================
+// ACCOUNT-WISE MONTHLY COMPARISON - NEW
+// ============================================
+
+export const getAccountWiseMonthly = async (financialYear, accountType) => {
+  try {
+    const url = `${API_URL}?action=getAccountWiseMonthly&token=${getToken()}&financialYear=${financialYear || '2023-24'}&accountType=${accountType || 'all'}`;
+    
+    console.log('📊 Fetching account-wise monthly:', { financialYear, accountType });
+    
+    const res = await fetch(url);
+    const data = await res.json();
+    
+    if (data.success) {
+      console.log('📥 Account-wise Monthly:', {
+        incomeAccounts: data.data.incomeAccounts?.length || 0,
+        expenseAccounts: data.data.expenseAccounts?.length || 0,
+        totalIncome: data.data.summary?.totalIncome,
+        totalExpense: data.data.summary?.totalExpense
+      });
+    }
+    
+    return data;
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+};
+
+// ============================================
 // USER MANAGEMENT
 // ============================================
 

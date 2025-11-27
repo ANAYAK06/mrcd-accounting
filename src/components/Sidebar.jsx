@@ -59,7 +59,8 @@ function Sidebar({ isOpen, onToggle, activeTab, onTabChange }) {
         { id: 'ledger', label: 'Ledger' },
         { id: 'trial-balance', label: 'Trial Balance' },
         { id: 'income-expenditure', label: 'Income & Expenditure' },
-        { id: 'balance-sheet', label: 'Balance Sheet' }
+        { id: 'balance-sheet', label: 'Balance Sheet' },
+        { id: 'account-wise-monthly', label: 'Account-wise Monthly' }
       ]
     },
     {
