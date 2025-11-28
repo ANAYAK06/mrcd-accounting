@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/mrcd-accounting/static/css/main.fb615f3b.css",
-    "main.js": "/mrcd-accounting/static/js/main.0d084386.js",
+    "main.css": "/mrcd-accounting/static/css/main.6a67fbb0.css",
+    "main.js": "/mrcd-accounting/static/js/main.f6791f7f.js",
     "static/js/453.86b9f39f.chunk.js": "/mrcd-accounting/static/js/453.86b9f39f.chunk.js",
     "static/media/logo.png": "/mrcd-accounting/static/media/logo.d037b793eb85db1f2c69.png",
     "static/media/mrcd-logo.png": "/mrcd-accounting/static/media/mrcd-logo.f42964fa30ec97174b72.png",
     "index.html": "/mrcd-accounting/index.html",
-    "main.fb615f3b.css.map": "/mrcd-accounting/static/css/main.fb615f3b.css.map",
-    "main.0d084386.js.map": "/mrcd-accounting/static/js/main.0d084386.js.map",
+    "main.6a67fbb0.css.map": "/mrcd-accounting/static/css/main.6a67fbb0.css.map",
+    "main.f6791f7f.js.map": "/mrcd-accounting/static/js/main.f6791f7f.js.map",
     "453.86b9f39f.chunk.js.map": "/mrcd-accounting/static/js/453.86b9f39f.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.fb615f3b.css",
-    "static/js/main.0d084386.js"
+    "static/css/main.6a67fbb0.css",
+    "static/js/main.f6791f7f.js"
   ]
 }
