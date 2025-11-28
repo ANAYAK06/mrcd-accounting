@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getChartOfAccounts, addVoucher, getNextVoucherNumber } from '../api/api';
 import { Plus, Trash2, Save, RefreshCw, AlertCircle, CheckCircle } from 'lucide-react';
+import { showToast } from '../utils/toast';
 
 function VoucherEntry({ voucherType = 'Payment' }) {
   const [loading, setLoading] = useState(false);
@@ -12,7 +13,6 @@ function VoucherEntry({ voucherType = 'Payment' }) {
     { accountCode: '', accountName: '', debit: '', credit: '' },
     { accountCode: '', accountName: '', debit: '', credit: '' }
   ]);
-  const [message, setMessage] = useState({ type: '', text: '' });
 
   // Load accounts and voucher number on mount
   useEffect(() => {
@@ -25,6 +25,8 @@ function VoucherEntry({ voucherType = 'Payment' }) {
     console.log('Accounts loaded:', result);
     if (result.success) {
       setAccounts(result.data.filter(acc => acc.isActive));
+    } else {
+      showToast('error', 'Failed to load accounts. Please refresh the page.');
     }
   };
 
@@ -33,6 +35,8 @@ function VoucherEntry({ voucherType = 'Payment' }) {
     console.log('Voucher number:', result);
     if (result.success) {
       setVoucherNo(result.voucherNo);
+    } else {
+      showToast('error', 'Failed to load voucher number.');
     }
   };
 
@@ -112,6 +116,7 @@ const updateEntry = (index, field, value) => {
     return newEntries;
   });
 };
+
   // Calculate totals
   const calculateTotals = () => {
     const totalDebit = entries.reduce((sum, entry) => sum + parseFloat(entry.debit || 0), 0);
@@ -123,27 +128,27 @@ const updateEntry = (index, field, value) => {
   // Validate form
   const validateForm = () => {
     if (!voucherNo.trim()) {
-      setMessage({ type: 'error', text: 'Voucher number is required' });
+      showToast('error', 'Voucher number is required');
       return false;
     }
     if (!date) {
-      setMessage({ type: 'error', text: 'Date is required' });
+      showToast('error', 'Date is required');
       return false;
     }
     if (!narration.trim()) {
-      setMessage({ type: 'error', text: 'Narration is required' });
+      showToast('error', 'Narration is required');
       return false;
     }
 
     const validEntries = entries.filter(e => e.accountCode && (parseFloat(e.debit) > 0 || parseFloat(e.credit) > 0));
     if (validEntries.length < 2) {
-      setMessage({ type: 'error', text: 'At least 2 entries are required' });
+      showToast('error', 'At least 2 entries are required');
       return false;
     }
 
     const totals = calculateTotals();
     if (Math.abs(totals.difference) > 0.01) {
-      setMessage({ type: 'error', text: 'Debit and Credit must be equal!' });
+      showToast('error', 'Debit and Credit must be equal!');
       return false;
     }
 
@@ -159,7 +164,6 @@ const updateEntry = (index, field, value) => {
     }
 
     setLoading(true);
-    setMessage({ type: '', text: '' });
 
     const validEntries = entries.filter(e => 
       e.accountCode && (parseFloat(e.debit) > 0 || parseFloat(e.credit) > 0)
@@ -178,14 +182,14 @@ const updateEntry = (index, field, value) => {
     console.log('Voucher result:', result);
 
     if (result.success) {
-      setMessage({ type: 'success', text: `Voucher ${result.voucherNo || voucherNo} saved successfully!` });
+      showToast('success', `${voucherType} voucher ${result.voucherNo || voucherNo} submitted successfully!`);
       
-      // Reset form after 2 seconds
+      // Reset form after 1.5 seconds
       setTimeout(() => {
         resetForm();
-      }, 2000);
+      }, 1500);
     } else {
-      setMessage({ type: 'error', text: result.error || 'Failed to save voucher' });
+      showToast('error', result.error || 'Failed to save voucher. Please try again.');
     }
 
     setLoading(false);
@@ -199,7 +203,6 @@ const updateEntry = (index, field, value) => {
     ]);
     setNarration('');
     setDate(new Date().toISOString().split('T')[0]);
-    setMessage({ type: '', text: '' });
     loadVoucherNumber();
   };
 
@@ -261,22 +264,6 @@ const updateEntry = (index, field, value) => {
           </div>
         </div>
       </div>
-
-      {/* Message */}
-      {message.text && (
-        <div className={`p-4 rounded-lg border flex items-start gap-3 ${
-          message.type === 'success' 
-            ? 'bg-green-50 border-green-200 text-green-800' 
-            : 'bg-red-50 border-red-200 text-red-800'
-        }`}>
-          {message.type === 'success' ? (
-            <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
-          ) : (
-            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
-          )}
-          <span className="text-sm font-medium">{message.text}</span>
-        </div>
-      )}
 
       {/* Voucher Form */}
       <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md">

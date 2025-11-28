@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { isAuthenticated, getCurrentUser } from './api/api';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
@@ -13,6 +15,7 @@ import TrialBalance from './components/reports/TrialBalance';
 import IncomeExpenditure from './components/reports/IncomeExpenditure';
 import BalanceSheet from './components/reports/BalanceSheet';
 import AccountWiseMonthly from './components/reports/AccountWiseMonthly';
+import UserManagement from './components/UserManagement';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -97,10 +100,7 @@ function App() {
               <AccountWiseMonthly />
             )}
             {activeTab === 'users' && (
-              <div className="bg-white rounded-xl shadow-md p-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">User Management</h2>
-                <p className="text-gray-600">User management will be here</p>
-              </div>
+              <UserManagement />
             )}
             {activeTab === 'settings' && (
               <div className="bg-white rounded-xl shadow-md p-8">
@@ -114,6 +114,18 @@ function App() {
           <Footer />
         </main>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }

@@ -63,8 +63,8 @@ function Navbar({ onMenuClick, isSidebarOpen }) {
             {/* Logo and App Name */}
             <div className="flex items-center gap-3">
               {/* App Logo */}
-              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center p-1.5 border border-gray-200">
-                <img src={appLogo} alt="NGO Accounts" className="w-full h-full object-contain" />
+              <div className="w-10 h-10 bg-green-400 rounded-full flex items-center justify-center p-1 border border-gray-200 shadow-md ">
+                <img src={appLogo} alt="NGO Accounts" className="w-full h-full object-contain rounded-full shadow-md" />
               </div>
               
               {/* App Name */}

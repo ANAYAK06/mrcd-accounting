@@ -1,5 +1,5 @@
 // Simple fetch - no axios, no CORS proxy, no JSONP
-const API_URL = 'https://script.google.com/macros/s/AKfycbyDSET1ZBuADd6ayY3EPYO2Ua1mfAiVlOWGgYp322uXVbxtvvfgh-9SyZy51kc5lbDqnw/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbxWT9yZxoGsVXCrn_L2cSjABokKnk_wpv6yQYE_6O-i7uRSEHw5fvspPwmqwgZPmfiFOA/exec';
 
 const getToken = () => localStorage.getItem('token');
 const getUser = () => JSON.parse(localStorage.getItem('user') || '{}');

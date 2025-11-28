@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { getChartOfAccounts, addAccount, updateAccount, deleteAccount } from '../api/api';
 import { Plus, Edit2, Trash2, Search, RefreshCw, CheckCircle, XCircle, Save, X, Calendar } from 'lucide-react';
+import { showToast } from '../utils/toast';
 
 function ChartOfAccounts() {
   const [accounts, setAccounts] = useState([]);
   const [filteredAccounts, setFilteredAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('All');
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [message, setMessage] = useState({ type: '', text: '' });
   
   const [formData, setFormData] = useState({
     accountCode: '',
@@ -18,8 +19,8 @@ function ChartOfAccounts() {
     accountType: 'Asset',
     parent: '',
     openingBalance: 0,
-    openingBalanceType: 'Debit',  // NEW
-    openingBalanceAsOnDate: new Date().toISOString().split('T')[0],  // NEW
+    openingBalanceType: 'Debit',
+    openingBalanceAsOnDate: new Date().toISOString().split('T')[0],
     isActive: true
   });
 
@@ -39,6 +40,8 @@ function ChartOfAccounts() {
     if (result.success) {
       console.log('📊 Loaded accounts with new fields:', result.data[0]);
       setAccounts(result.data);
+    } else {
+      showToast('error', 'Failed to load accounts. Please refresh the page.');
     }
     setLoading(false);
   };
@@ -82,12 +85,12 @@ function ChartOfAccounts() {
       });
     }
     setShowModal(true);
-    setMessage({ type: '', text: '' });
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
     setEditMode(false);
+    setSubmitting(false);
     setFormData({
       accountCode: '',
       accountName: '',
@@ -98,7 +101,6 @@ function ChartOfAccounts() {
       openingBalanceAsOnDate: new Date().toISOString().split('T')[0],
       isActive: true
     });
-    setMessage({ type: '', text: '' });
   };
 
   // Helper function to get default balance type based on account type
@@ -123,18 +125,19 @@ function ChartOfAccounts() {
 
     // Validation
     if (!formData.accountCode.trim()) {
-      setMessage({ type: 'error', text: 'Account code is required' });
+      showToast('error', 'Account code is required');
       return;
     }
     if (!formData.accountName.trim()) {
-      setMessage({ type: 'error', text: 'Account name is required' });
+      showToast('error', 'Account name is required');
       return;
     }
     if (!formData.openingBalanceAsOnDate) {
-      setMessage({ type: 'error', text: 'Opening balance date is required' });
+      showToast('error', 'Opening balance date is required');
       return;
     }
 
+    setSubmitting(true);
     console.log('💾 Submitting account data:', formData);
 
     let result;
@@ -145,27 +148,26 @@ function ChartOfAccounts() {
     }
 
     if (result.success) {
-      setMessage({ 
-        type: 'success', 
-        text: `Account ${editMode ? 'updated' : 'created'} successfully!` 
-      });
+      showToast('success', `Account "${formData.accountName}" ${editMode ? 'updated' : 'created'} successfully!`);
       setTimeout(() => {
         handleCloseModal();
         loadAccounts();
+        setSubmitting(false);
       }, 1500);
     } else {
-      setMessage({ type: 'error', text: result.error || 'Operation failed' });
+      showToast('error', result.error || `Failed to ${editMode ? 'update' : 'create'} account. Please try again.`);
+      setSubmitting(false);
     }
   };
 
-  const handleDelete = async (accountCode) => {
-    if (window.confirm(`Are you sure you want to deactivate account ${accountCode}?`)) {
+  const handleDelete = async (accountCode, accountName) => {
+    if (window.confirm(`Are you sure you want to deactivate account "${accountName}"?`)) {
       const result = await deleteAccount(accountCode);
       if (result.success) {
-        alert('Account deactivated successfully!');
+        showToast('success', `Account "${accountName}" deactivated successfully!`);
         loadAccounts();
       } else {
-        alert('Failed to deactivate account: ' + result.error);
+        showToast('error', result.error || 'Failed to deactivate account. It may be in use.');
       }
     }
   };
@@ -404,7 +406,7 @@ function ChartOfAccounts() {
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => handleDelete(account.accountCode)}
+                          onClick={() => handleDelete(account.accountCode, account.accountName)}
                           className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                           title="Deactivate"
                         >
@@ -441,22 +443,6 @@ function ChartOfAccounts() {
 
             {/* Modal Body */}
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              {/* Message */}
-              {message.text && (
-                <div className={`p-4 rounded-lg border flex items-start gap-3 ${
-                  message.type === 'success' 
-                    ? 'bg-green-50 border-green-200 text-green-800' 
-                    : 'bg-red-50 border-red-200 text-red-800'
-                }`}>
-                  {message.type === 'success' ? (
-                    <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                  ) : (
-                    <XCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                  )}
-                  <span className="text-sm font-medium">{message.text}</span>
-                </div>
-              )}
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Account Code */}
                 <div>
@@ -528,14 +514,15 @@ function ChartOfAccounts() {
                   <input
                     type="number"
                     value={formData.openingBalance}
-                    onChange={(e) => setFormData({ ...formData, openingBalance: parseFloat(e.target.value) || 0 })}
+                    onChange={(e) => setFormData({ ...formData, openingBalance: e.target.value === '' ? 0 : parseFloat(e.target.value) })}
+                    onFocus={(e) => e.target.value === '0' && e.target.select()}
                     step="0.01"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="0.00"
                   />
                 </div>
 
-                {/* Opening Balance Type - NEW */}
+                {/* Opening Balance Type */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Opening Balance Type <span className="text-red-500">*</span>
@@ -554,9 +541,9 @@ function ChartOfAccounts() {
                   </p>
                 </div>
 
-                {/* Opening Balance As On Date - NEW */}
+                {/* Opening Balance As On Date */}
                 <div>
-                  <label className=" text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
                     <Calendar className="w-4 h-4" />
                     Opening Balance As On Date <span className="text-red-500">*</span>
                   </label>
@@ -599,16 +586,27 @@ function ChartOfAccounts() {
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  disabled={submitting}
+                  className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  disabled={submitting}
+                  className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Save className="w-4 h-4" />
-                  {editMode ? 'Update' : 'Create'} Account
+                  {submitting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      {editMode ? 'Updating...' : 'Creating...'}
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4" />
+                      {editMode ? 'Update' : 'Create'} Account
+                    </>
+                  )}
                 </button>
               </div>
             </form>
