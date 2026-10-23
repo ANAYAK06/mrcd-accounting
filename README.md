@@ -1,70 +1,51 @@
-# Getting Started with Create React App
+# NGO Accounts (MRCD)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A double-entry accounting web app for a non-profit organisation. Staff record payment, receipt, journal and contra vouchers, and the app produces the ledger, trial balance, income and expenditure account and balance sheet for any Indian financial year (April to March).
 
-## Available Scripts
+**Live app:** https://anayak06.github.io/mrcd-accounting (sign-in required)
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Chart of accounts:** asset, liability, income, expense and capital accounts with opening balances; add, edit and delete accounts.
+- **Vouchers:** payment, receipt, journal and contra vouchers with automatic voucher numbers. A voucher can only be saved when debits equal credits and every amount line has an account.
+- **Voucher list:** search and review saved vouchers.
+- **Reports:** ledger, trial balance, income and expenditure, balance sheet, and an account-wise monthly report for a chosen financial year.
+- **Dashboard:** totals for assets, liabilities, income and expenditure, and the monthly surplus or deficit.
+- **Users:** sign-in with a session token; administrators manage user accounts.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Architecture
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```
+React (this repo, GitHub Pages)  --fetch-->  Google Apps Script web app  -->  Google Sheets
+```
 
-### `npm test`
+- **Front end:** React 19 with Tailwind CSS, hosted on GitHub Pages.
+- **Back end:** a Google Apps Script web app that stores accounts, vouchers and users in Google Sheets and calculates the reports. All calls go through `src/api/api.js`.
+- **Accounting rules:** pure, unit-tested helpers in `src/utils/` (`voucher.js` for balancing and validating vouchers, `financialYear.js` for April-to-March financial years).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+This setup costs nothing to run, which suits a small organisation, and the data stays in the organisation's own Google account.
 
-### `npm run build`
+## Running locally
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm install
+npm start          # http://localhost:3000
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Tests
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm test
+```
 
-### `npm run eject`
+Tests cover voucher validation and the financial-year calculations. They run on every push and pull request through GitHub Actions.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Deploying
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm run deploy     # builds and publishes to GitHub Pages
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Tech stack
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+React 19 · Tailwind CSS · Google Apps Script · Google Sheets · Jest and Testing Library · GitHub Actions · GitHub Pages
