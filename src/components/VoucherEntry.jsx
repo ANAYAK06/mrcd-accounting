@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { getChartOfAccounts, addVoucher, getNextVoucherNumber } from '../api/api';
 import { Plus, Trash2, Save, RefreshCw, AlertCircle, CheckCircle } from 'lucide-react';
 import { showToast } from '../utils/toast';
+import { calculateTotals, getValidEntries, isBalanced as checkBalanced, todayAsInputValue, validateVoucherEntries } from '../utils/voucher';
 
 function VoucherEntry({ voucherType = 'Payment' }) {
   const [loading, setLoading] = useState(false);
   const [accounts, setAccounts] = useState([]);
   const [voucherNo, setVoucherNo] = useState('');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState(todayAsInputValue());
   const [narration, setNarration] = useState('');
   const [entries, setEntries] = useState([
     { accountCode: '', accountName: '', debit: '', credit: '' },
@@ -22,7 +23,6 @@ function VoucherEntry({ voucherType = 'Payment' }) {
 
   const loadAccounts = async () => {
     const result = await getChartOfAccounts();
-    console.log('Accounts loaded:', result);
     if (result.success) {
       setAccounts(result.data.filter(acc => acc.isActive));
     } else {
@@ -32,7 +32,6 @@ function VoucherEntry({ voucherType = 'Payment' }) {
 
   const loadVoucherNumber = async () => {
     const result = await getNextVoucherNumber(voucherType);
-    console.log('Voucher number:', result);
     if (result.success) {
       setVoucherNo(result.voucherNo);
     } else {
@@ -61,16 +60,7 @@ const updateEntry = (index, field, value) => {
       // Trim the value to remove any whitespace
       const trimmedValue = value.trim();
       
-      console.log('🔍 Looking for account code:', trimmedValue);
-      console.log('📋 Available accounts:', accounts);
-      
-      // Try to find the account
-      const account = accounts.find(acc => {
-        console.log('Comparing:', acc.accountCode, 'with', trimmedValue);
-        return String(acc.accountCode).trim() === trimmedValue;
-      });
-      
-      console.log('✅ Found account:', account);
+      const account = accounts.find(acc => String(acc.accountCode).trim() === trimmedValue);
       
       if (account) {
         newEntries[index] = {
@@ -112,18 +102,9 @@ const updateEntry = (index, field, value) => {
       };
     }
     
-    console.log('💾 Updated entries:', newEntries);
     return newEntries;
   });
 };
-
-  // Calculate totals
-  const calculateTotals = () => {
-    const totalDebit = entries.reduce((sum, entry) => sum + parseFloat(entry.debit || 0), 0);
-    const totalCredit = entries.reduce((sum, entry) => sum + parseFloat(entry.credit || 0), 0);
-    const difference = totalDebit - totalCredit;
-    return { totalDebit, totalCredit, difference };
-  };
 
   // Validate form
   const validateForm = () => {
@@ -140,15 +121,9 @@ const updateEntry = (index, field, value) => {
       return false;
     }
 
-    const validEntries = entries.filter(e => e.accountCode && (parseFloat(e.debit) > 0 || parseFloat(e.credit) > 0));
-    if (validEntries.length < 2) {
-      showToast('error', 'At least 2 entries are required');
-      return false;
-    }
-
-    const totals = calculateTotals();
-    if (Math.abs(totals.difference) > 0.01) {
-      showToast('error', 'Debit and Credit must be equal!');
+    const entriesError = validateVoucherEntries(entries);
+    if (entriesError) {
+      showToast('error', entriesError);
       return false;
     }
 
@@ -165,9 +140,7 @@ const updateEntry = (index, field, value) => {
 
     setLoading(true);
 
-    const validEntries = entries.filter(e => 
-      e.accountCode && (parseFloat(e.debit) > 0 || parseFloat(e.credit) > 0)
-    );
+    const validEntries = getValidEntries(entries);
 
     const voucherData = {
       voucherType,
@@ -177,9 +150,7 @@ const updateEntry = (index, field, value) => {
       entries: validEntries
     };
 
-    console.log('Submitting voucher:', voucherData);
     const result = await addVoucher(voucherData);
-    console.log('Voucher result:', result);
 
     if (result.success) {
       showToast('success', `${voucherType} voucher ${result.voucherNo || voucherNo} submitted successfully!`);
@@ -202,12 +173,12 @@ const updateEntry = (index, field, value) => {
       { accountCode: '', accountName: '', debit: '', credit: '' }
     ]);
     setNarration('');
-    setDate(new Date().toISOString().split('T')[0]);
+    setDate(todayAsInputValue());
     loadVoucherNumber();
   };
 
-  const totals = calculateTotals();
-  const isBalanced = Math.abs(totals.difference) < 0.01;
+  const totals = calculateTotals(entries);
+  const isBalanced = checkBalanced(totals);
 
   // Get voucher type details with fixed classes
   const getVoucherTypeInfo = () => {

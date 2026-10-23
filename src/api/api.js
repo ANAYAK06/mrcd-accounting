@@ -10,23 +10,16 @@ const getUser = () => JSON.parse(localStorage.getItem('user') || '{}');
 
 export const login = async (email, password) => {
   try {
-    console.log('🔐 Attempting login...');
-    
     const url = `${API_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
-    
-    console.log('📤 URL:', url);
-    
+
     const res = await fetch(url);
     const data = await res.json();
-    
-    console.log('📥 Response:', data);
-    
+
     if (data.success) {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
-      console.log('✅ Login successful!');
     }
-    
+
     return data;
   } catch (error) {
     console.error('❌ Login error:', error);
@@ -59,11 +52,7 @@ export const getChartOfAccounts = async () => {
     const url = `${API_URL}?action=getChartOfAccounts&token=${getToken()}`;
     const res = await fetch(url);
     const data = await res.json();
-    
-    // Log to verify new fields are received
-    if (data.success && data.data.length > 0) {
-      console.log('📊 Chart of Accounts Sample:', data.data[0]);
-    }
+
     
     return data;
   } catch (error) {
@@ -88,17 +77,13 @@ export const addAccount = async (accountData) => {
         new Date().toISOString().split('T')[0],
       isActive: accountData.isActive !== false
     };
-    
-    console.log('➕ Adding account:', payload);
-    
+
     const res = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify(payload)
     });
     const data = await res.json();
-    
-    console.log('📥 Add account response:', data);
-    
+
     return data;
   } catch (error) {
     return { success: false, error: error.message };
@@ -122,17 +107,13 @@ export const updateAccount = async (accountData) => {
         new Date().toISOString().split('T')[0],
       isActive: accountData.isActive !== false
     };
-    
-    console.log('✏️ Updating account:', payload);
-    
+
     const res = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify(payload)
     });
     const data = await res.json();
-    
-    console.log('📥 Update account response:', data);
-    
+
     return data;
   } catch (error) {
     return { success: false, error: error.message };
@@ -246,21 +227,10 @@ export const getIncomeExpenditure = async (fromDate, toDate) => {
 export const getLedger = async (accountCode, fromDate, toDate) => {
   try {
     const url = `${API_URL}?action=getLedger&token=${getToken()}&accountCode=${accountCode}&fromDate=${fromDate || ''}&toDate=${toDate || ''}`;
-    
-    console.log('📊 Fetching ledger:', { accountCode, fromDate, toDate });
-    
+
     const res = await fetch(url);
     const data = await res.json();
-    
-    if (data.success) {
-      console.log('📥 Ledger response:', {
-        accountName: data.data.accountName,
-        openingBalance: data.data.openingBalance,
-        openingBalanceDate: data.data.openingBalanceDate,
-        transactions: data.data.transactions?.length || 0
-      });
-    }
-    
+
     return data;
   } catch (error) {
     return { success: false, error: error.message };
@@ -270,20 +240,10 @@ export const getLedger = async (accountCode, fromDate, toDate) => {
 export const getTrialBalance = async (asOnDate) => {
   try {
     const url = `${API_URL}?action=getTrialBalance&token=${getToken()}&asOnDate=${asOnDate || ''}`;
-    
-    console.log('⚖️ Fetching trial balance for:', asOnDate || 'today');
-    
+
     const res = await fetch(url);
     const data = await res.json();
-    
-    if (data.success) {
-      console.log('📥 Trial Balance:', {
-        accounts: data.data.accounts?.length || 0,
-        totalDebit: data.data.totalDebit,
-        totalCredit: data.data.totalCredit,
-        isBalanced: data.data.isBalanced
-      });
-    }
+
     
     return data;
   } catch (error) {
@@ -298,20 +258,10 @@ export const getTrialBalance = async (asOnDate) => {
 export const getAccountWiseMonthly = async (financialYear, accountType) => {
   try {
     const url = `${API_URL}?action=getAccountWiseMonthly&token=${getToken()}&financialYear=${financialYear || '2023-24'}&accountType=${accountType || 'all'}`;
-    
-    console.log('📊 Fetching account-wise monthly:', { financialYear, accountType });
-    
+
     const res = await fetch(url);
     const data = await res.json();
-    
-    if (data.success) {
-      console.log('📥 Account-wise Monthly:', {
-        incomeAccounts: data.data.incomeAccounts?.length || 0,
-        expenseAccounts: data.data.expenseAccounts?.length || 0,
-        totalIncome: data.data.summary?.totalIncome,
-        totalExpense: data.data.summary?.totalExpense
-      });
-    }
+
     
     return data;
   } catch (error) {
